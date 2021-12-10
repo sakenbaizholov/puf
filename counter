@@ -1,0 +1,36 @@
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.numeric_std.all;
+
+
+entity counter is
+generic(
+width: integer:=8);
+port(
+count_clk: in std_logic;
+rst:in std_logic;
+count: inout std_logic_vector(7 downto 0)
+);
+end entity counter;
+
+
+architecture Behavioral of counter is
+signal count_temp : std_logic_vector(width-1 downto 0);
+begin
+
+process(count_clk,rst)
+begin
+if(rst='0') then
+count_temp <= (others => '0');
+if rising_edge(count_clk) then
+count_temp<=std_logic_vector(unsigned(count_temp)+1);
+end if;
+end if;
+end process;
+
+
+count<=count_temp;
+
+
+end Behavioral;
