@@ -1,0 +1,34 @@
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+
+entity ring_o_bank is
+generic(
+width: positive:=4);
+port(
+en: IN STD_LOGIC;
+ro_bank_out: OUT STD_LOGIC_VECTOR(0 to 3));
+end ring_o_bank;
+
+architecture Behavioral of ring_o_bank is
+component ring_o 
+PORT ( en: IN STD_LOGIC;
+ro_out: INOUT STD_LOGIC);
+end component;
+signal path: STD_LOGIC_VECTOR(0 to width);
+
+attribute dont_touch : string;
+attribute dont_touch of path : signal is "true";
+
+begin
+BANK: for i in 0 to (width-1)
+generate
+Stage: ring_o PORT MAP(
+en=>en,
+ro_out =>path(i));
+END GENERATE; 
+Assignment: for i in 0 to (width-1) GENERATE
+ro_bank_out(i)<= path(i);
+end GENERATE;
+end Behavioral;
