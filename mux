@@ -1,0 +1,26 @@
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity mux is
+PORT (
+mux_in: IN STD_LOGIC_VECTOR(0 to 3);
+challenge: IN STD_LOGIC_VECTOR(1 downto 0);
+mux_out: OUT STD_LOGIC);
+end mux;
+
+architecture behavioral of mux is
+begin
+process(challenge,mux_in) is
+begin
+if (challenge <= "00") then
+mux_out <= mux_in(0);
+elsif (challenge <= "01") then
+mux_out <= mux_in(1);
+elsif (challenge <= "10") then
+mux_out <= mux_in(2);
+else
+mux_out <= mux_in(3);
+end if;
+end process;
+end behavioral;
