@@ -1,0 +1,44 @@
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+
+entity ring_o is
+generic (
+CH_LENGTH: positive:=8;
+l:positive:=1); 
+PORT ( en: IN STD_LOGIC;
+ro_out: INOUT STD_LOGIC);
+end ring_o;
+
+architecture Behavioral of ring_o is
+component AND_GATE
+PORT (a,b: IN STD_LOGIC;
+y_and: OUT STD_LOGIC);
+end component;  
+
+component NOT_GATE
+PORT (a:IN STD_LOGIC;
+y_not: OUT STD_LOGIC);
+end component;
+
+signal ro_path:STD_LOGIC_VECTOR(0 to CH_LENGTH);
+
+attribute dont_touch : string;
+attribute dont_touch of ro_path : signal is "true";
+begin  
+Stage1 : AND_GATE PORT MAP(
+  a =>en,
+  b => ro_path(CH_LENGTH),
+  y_and=> ro_path(l) 
+  );
+  
+Stage2: FOR i in 1 TO (CH_LENGTH-l)
+GENERATE
+inverter_gate : NOT_GATE PORT MAP(
+a=> ro_path(i),
+y_not=> ro_path(i+l)
+);
+END GENERATE;
+ro_out <= ro_path(7);
+end Behavioral;
